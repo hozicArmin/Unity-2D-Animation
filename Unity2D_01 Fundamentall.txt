@@ -1,0 +1,347 @@
+====================================================================================================================================
+Unity 2D Fundamentals - Character Control  by Brian Sinasac
+====================================================================================================================================
+1-Course Overview
+====================================================================================================================================
+2-Project Overview and Creating Our First Assets
+------------------------------------------------------------------------------------------------------------------------------------
+2.1- Project Overview
+---------------------
+2.1.1- U Assets folderu kreiramo nove foldere: Animation , preFabs , Scripts , Sprites i Scenes ako nema.
+2.1.2- MainScene ili SimpleScene postavljamo u folder Assets => Scenes.
+2.1.3- Assets => Sprites D. klik u prozoru Sprites i Import New Asset... (Dodajemo slike u folder)(Nakon importa idi ispod)
+
+-------------------------------------------------------------------------------------------
+2.1.4-Posto u Sprites imamo sliku koja sadrzi vise slika sada cemo je podjeliti da je mozemo odvojeno koristiti:
+     a) Klik na sliku grassPlatformsFiltered i pojavljuje se Inspector window koji cemo podesiti i u kojem cemo podjeliti sliku.
+        Texture Type Sprite 2D and UI ,  Spite Mode => Multiple 
+     b) Idi na Button Sprite Editor => Apply. 
+     c) Sada se pojavljuje novi prozor Sprite Editor...
+     d) Postavke su Type Automatic, Pivot Center i sada idi na Slice Button (time smo obrubili slike)
+     e) Zatvori Sprite Editor prozor i klik na Apply (time dobijamo nove tri slike u Assets-> Sprites)
+---------------------------------------------------
+
+2.1.5- Iz Sprites Drag'n'Drop sliku na Scenu -> klik na sliku u sceni i pojavljuje se Inspector prozor
+     a) Postavljanje slike na centar: Podesimo pozicije i rot. na NULU ili u Transform oknu DESNO klik na
+        kruzni padajuci meni -> Reset.
+     b) Sada preimenujmo sliku na GrassPlatformLarge (Vidimo da se preimenovala i u Hierarchy prozoru). 
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.2- Creating the Assets           (Ovdje dodajemo Fizicki objekat za nasu sliku) + (PreFabs )
+--------------------------
+2.2.1- Sada dodajemo nesto sto ce nasu sliku povezati sa "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D. 
+       a) U prozoru Box Collider 2D takodje mozemo mijenjati velicinu slike na Size.
+       b) U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno, a
+          TO ZNACI DA TU MOZEMO POSTAVITI GRANICE U SAMOJ SLICI NPR. u travi GDJE CE Player imati afekt! 
+
+2.2.2- PreFabs - Sada uredjenu sliku iz Hierarchy drag'n'drop u prefab folder. 
+       Tako cemo moci ovu sliku koristiti uvjek iznova i iznova kao uredjenu tj. reusable kao C# BaseClass.
+
+2.2.3- Sada idemo dalje sa postavljanjem objekata na scenu pa dodajemo sliku travu Medium size i pomjeramo
+       prije postavljenu grassPlatformLarge na stranu da bi uredili medium. reimenujemo je grassPlatformMedium.
+       Sada dodajemo isto kao i prvoj slici "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D
+       U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno.
+
+2.2.4- Isto tako povezati sa "2D fizickim engine i Editovati collider i za grassPlatformSmall.
+       
+2.2.5- Sada kad imamo uredjene slike u preFabs folderu mi mozemo brisati slike iz Hirarchy prozora, a
+       dodavati po potrebi slike iz preFabs.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.3- Rendering and Parallax (Paralaksa je Prividan položaj objekta vidjen iz dve razlicite tacke koje nisu u liniji sa objektom)
+-------------------------------------
+2.3.1- Postavljanje background-a i Layer-a (Layers in Depth)
+ 
+      a) Otvori Sprites folder => dragdrop grassPlatform... prvu najduzu sliku u Hierarchy prozor. Vidjet ces pojavljuje u Scene
+         prozoru.. ona prva origilanlna slika grassPlatformsFiltered_0 (Prije toga sam selektovao sliku koja je bila na u sceni!)
+      b) Preimenovat cemo je u grassPlatformLargeBG 
+      c) Sada idemo na Color bijelo okno i D. klik na. Tu cemo je izmjeniti da ne izgleda zeleno kao druge slike (R100, G80, B50)
+         zatim je DragDrop u folder preFabs
+
+
+
+2.3.2- Sad postavljamo Background- Order in Layer npr. na -10. To se naziva "Zed fighting" ali to nema veze sa Z-osom-tackom!
+       U smislu Layer-a Unity funkcionise tako da Layere postavljamo(Order in Layer (-10 NPR ce postaviti iza 0),a ne po tacki Z).
+       Unity ne funkcionise tako da postavljamo 2D nego trazi da postavljamo podatke npr. u Inspector window!
+
+
+2.3.3- Prefab Apply: Da bi nas preFab imao uvjek startne vrijednosti idemo na vrh inspector-a gdje je Prefab i u toj liniji
+       imamo Prefab Select Revert Apply  ( ili Overrides.....)
+       a) Selektuj objekat u Hierarchy => Overrides => Otvara se podprozor koji ima kvaciciu pa klik na nj. i tu se otvara jos
+          jedan novi prozor tzv. Override => Apply
+
+       b) Selektuj objekat u Hierarchy => Overrides => Apply All nakon Apply-a ili All Apply svaki put kad DragDrop sliku
+          iz Prefab-a postavimo na scenu imati cemo unesene vrijednosti iste!
+----------------------------------------------------------------------
+grassPlatformLargeBG  Order in Layer -10  (zatim Apply ili All Apply)
+grassPlatformMedium   Order in Layer  -9  (zatim Apply)
+grassPlatformSmall    Order in Layer  -8  (zatim Apply)
+grassPlatformLarge    Order in Layer  -1  (zatim Apply)
+grassPlatformMedium   Order in Layer   0  (zatim Apply)
+grassPlatformSmall    Order in Layer   1  (zatim Apply)
+------------------------------------------------------------------------
+
+===================================================================================================================================
+3-Creating Our Character
+-----------------------------------------------------------------------------------------------------------------------------------
+3.1- Creating Our Character Asset
+----------------------------------
+3.1.1-Otvori Sprites folder -> selektuj-klik na sliku knight-Idle => Sprite Mode: Multiple => 
+     -selektuj-klik na sliku knight-Idle  => Sprite Editor => Slice =>
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------
+Zatvori i Apply
+-------------------------------------------------------------------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+      
+-----------------------------------------------------------------------------------------------------
+3.1.3- DragNdrop prvu ikonu knight-Idle_0 na Scene prozor-okno =>
+       Rename u prozoru Inspektor knight-Idle_0 u knightPlayer =>
+       Tag Player (Unity nam omogucuje umjesto nas da postavi Tag Player)
+       Order in Layer 10 (Playera uvjek postavljamo na gornji Layer u game-u)
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.2- Adding the Character Physics Components
+--------------------------------------------
+3.2.1- Oznacimo u Hierarchy knightPlayer i dodajemo mu RigidBody 2D. Add Component => Physics 2D => RigidBody 2D   
+
+3.2.2- Oznacimo u Hierarchy knightPlayer i dodajemo mu Collider da bi mogao odskakati u kontaktu sa colliderima.
+       Hierarchy knightPlayer => Add Component => Physics 2D => Capsule Collider 2D.
+       U prozoru Capsule Collider => Edit Collider => uredi ga tacno da prekrije Player Body (smanji obim kapsule)
+
+       U prozoru RigidBody 2D imamo Properties NPR. Mass gdje postavljamo tezinu Playera itd...
+
+
+3.2.3- U zadnjem dijelu videa objasnjava da mozemo dodati Player-u Box Collider na tijelo, a Circle Collider na noge i
+       na taj nacin NPR. Player moze uci u cijev ili pecinu tako sto ce mu u kodu iskljuciti Box Collider sa tijela.
+
+       Remove Component- Na kruzicu gdje imamo Reset tu imamo i Remove Component.
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.3- Creating Our First Animation (Animation States) 
+----------------------------------
+3.3.1- Add Component => Miscellaneous => Animator. (U Inspector skrolaj na dno => Add Component => Miscellaneous =>A.)
+       (Add Component => Miscellaneous => Animator)
+
+3.3.2- Idi u Asset => u predhodno kreirani folder Animation => D.klik => Create => Animator Controller .
+       imenuj ga KnightAC (Knight Animator controller).
+
+3.3.3- Sada cemo kreirati Animation State Machine koji cemo koristiti da gradimo nas Animation States:
+       Oznaci KnightPlayer u Hierarchy => skrolaj Inspektor do Animator => DragAndDrop KnightAC iz Animation foldera u
+       Inspector => Animator => Controller u "Okno Controller" (Vidjet ces u Animator-u Controller, Avatar itd)
+
+
+3.3.4- Sada idi gore na Window => Animator i vidjet ces kreirani Animation State!
+
+3.3.5- Sada zelimo kreirati Animaciju da je dodamo za Animate State.
+
+a) Idi u Sprites folder => oznaci prvu ikonu Idle => skrolaj ko zadnje ikone => Shift => klik.
+   (Time smo selektovali sve slike Idle)
+b) Klik na NPR. prvog viteza => D.klik => Create => Animation. Imenujemo ga KnightIdle.
+   (Kreirali smo Brand New Asset)
+
+c) DragAndDrop KnightIdle u Asset => Animation folder. (ostanimo organizovani i spremajmo iteme properly)
+     
+
+d) Ponovo otvori Window => Animator (Ako je prazno oznaci u Hierarchy knightPlayer pa idi na prozor Animator=> Layers)
+   Sada kad vidimo kockice u Animation State sada DragAndDrop KnightIdle na Layers => Base Layer prozor!
+         
+e) Klik na Play i sada vidimo da nas se vitez krece veoma sporo. Dubble Klik na nasu animacij KnightIdle u prozoru Base Layer
+- Loop Time (Checked) - (time postavljamo nasu animaciju da lupuje iznova forever)
+- Vracamo se u Base Layer i nasu animaciju klik samo jednom i otvaraju se u Inspectoru informacije o pojedinacnim stanjima 
+-Speed postavljamo na 2.5 (ubrzavamo PlayerIdle state)
+ (Ako selektujemo u Hierarchy knightPlayer i posmatramo Animator=>Base Layer vidimo kako puni loop proces line od KnightIdle)
+
+
+
+================================================================================================================================
+4- Adding Player Movement    (Movement  Code)
+--------------------------------------------------------------------------------------------------------------------------------
+4.1.1- Creating and Run Animation  
+
+- Sada cemo sliku knight-run podjeliti isto kao sto smo uradili sa knight-Idle.
+  Idemo u Assets => Sprites => Oznaci sliku "knight-run" => Inspector =>
+a) Sprite Mode: Multiple => Sprite Editor => Apply 
+b) U Sprite Editor-u => Clice => Type => Grid By Cell Size 
+c) Sada unosimo dimenzije koje tacno znamo koje smo postavili za slike koje smo licno radili!
+   
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+-------------------------------------------------------------------------------------------------------------------------------
+
+4.1.2- Kreiramo Animaciju (Kreiramo Brand New Animation)
+-Selektuj prvu sliku "knight-Run_0" zatim klik na Shift, zatim selektuj zadnju sliku u nizu "knight-Run_11"
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "KnightRun". 
+
+4.1.3- Sada KnightRun animaciju iz foldera Sprites DragNdrop u Animation folder.
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+4.2- Writing the Run Movement Code  (Add Component => C# Script PlayerController)
+---------------------------------------------------------------------------------
+4.2.1- Klik na folder Assets da kreiramo C# skriptu
+
+a) Selektuj KnightPlayer u Hierarchy i skrolaj Inspector do dna => Add Component => New Script
+b) Imenuj je PlayerController (NEMA ZAMJENE IMENA NAKON IMENOVANJA jer ce izbaciti ERROR!!!!!!!!!)
+c) Language C#   (ili je automatski postavljen C#)
+d) Create and Add 
+
+
+--------------------------------------------------------------
+
+4.2.2- Povezujemo Visual Studio ili MonoDevelop Unity
+-Idi na Edit => Preferences => External Tools => External Script Editor "Visual Studio 2017 Community
+
+4.2.3- Otvori skriptu u VS: 
+-Selektuj KnightPlayer u Hierarchy => skrolaj Inspector => Player Controller (Script)
+-U Player Controller (Script) odna ispod pise "PROZIRNO" Script PlayerController (Klik na OKNO PlayerController)
+
+
+4.2.4- Dodajemo code da povezemo na objekat RigidBody2D (Vazno je da izaberemo RigidBody2D,a ne RigidBody)
+------------------------------------------------------------
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+
+    Rigidbody2D myRB;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    /// <summary>
+    /// myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+    /// i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+    /// 
+    /// </summary>
+    void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        float move = Input.GetAxis("Horizontal");
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y);
+    }
+}
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+================================================================================================================================
+================================================================================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Rezerva CODE
+4.2.4- Dodajemo code da povezemo na objekat RigidBody2D (Vazno je da izaberemo RigidBody2D,a ne RigidBody)
+------------------------------------------------------------
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+
+    Rigidbody2D myRB;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    /// <summary>
+    /// myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+    /// i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+    /// 
+    /// </summary>
+    void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        float move = Input.GetAxis("Horizontal");
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y);
+    }
+}
+
+
+================================================================================================================================
+

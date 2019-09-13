@@ -1,0 +1,468 @@
+====================================================================================================================================
+Unity 2D Fundamentals - Character Control by Brian Sinasac
+====================================================================================================================================
+4- Adding Player Movement    (Movement  Code)
+------------------------------------------------------------------------------------------------------------------------------------
+4.1.1- Creating and Run Animation  
+
+- Sada cemo sliku Knight-Run podjeliti isto kao sto smo uradili sa knight-Idle.
+  Idemo u Assets => Sprites => Oznaci sliku "knight-run" => Inspector =>
+a) Sprite Mode: Multiple => Sprite Editor => Apply 
+b) U Sprite Editor-u => Clice => Type => Grid By Cell Size 
+c) Sada unosimo dimenzije koje tacno znamo koje smo postavili za slike koje smo licno radili!
+   (Trebamo izracunati kako postaviti dimenzije!)
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+-----------------------------------------------------------------------------------------------------------------------------------
+
+4.1.2- Kreiramo Animaciju (Kreiramo Brand New Animation)
+-Selektuj prvu sliku "knight-Run_0" zatim klik na Shift, zatim selektuj zadnju sliku u nizu "knight-Run_11"
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "knightRun". 
+
+4.1.3- Sada knightRun animaciju iz foldera Sprites DragNdrop u Animation folder.
+
+------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------
+4.2- Writing the Run Movement Code  (Add Component => C# Script PlayerController)
+---------------------------------------------------------------------------------
+4.2.1- Klik na folder Assets da kreiramo C# skriptu
+
+a) Selektuj KnightPlayer u Hierarchy i skrolaj Inspector do dna => Add Component => New Script
+b) Imenuj je PlayerController (NEMA ZAMJENE IMENA NAKON IMENOVANJA jer ce izbaciti ERROR!!!!!!!!!)
+c) Language C#   (ili je automatski postavljen C#)
+d) Create and Add 
+
+
+------------------------------------------------------------------------------------------------------
+
+4.2.2- Povezujemo Visual Studio ili MonoDevelop Unity
+-Idi na Edit => Preferences => External Tools => External Script Editor "Visual Studio 2017 Community
+
+4.2.3- Otvori skriptu u VS: 
+-Selektuj KnightPlayer u Hierarchy => skrolaj Inspector => Player Controller (Script)
+-U Player Controller (Script) odna ispod pise "PROZIRNO" Script PlayerController (Klik na OKNO PlayerController)
+
+
+4.2.4- Dodajemo code da povezemo na objekat RigidBody2D (Vazno je da izaberemo RigidBody2D,a ne RigidBody)
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+
+    Rigidbody2D myRB;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    /// <summary>
+    /// myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+    /// i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+    /// 
+    /// </summary>
+    void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        float move = Input.GetAxis("Horizontal");
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y);
+    }
+}
+
+
+------------------------------------
+4.2.4- Sada u Inspector=> Player Controller Script vidimo da je dodjeljen public pristup za Max Speed 0.
+       Postavljamo NPR. Max Speed 8
+
+4.2.5- Kada pokrenemo Unity Play i pokrenemo Playera lijevo-desno on pada na stranu u Z osi-Axis. 
+       To se podesava preko Unity Constraints=> Freeze Rotation Z (Check)
+-Selektuj KnightPlayer u Hierarchy=>Skrolaj Inspector => RigidBodu 2D=> Constraints => Freeze Rotation Z (Check).
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+4.3.1- Writing the Turning Movement Code
+---------------------------------------
+4.3.1- Podesavamo okretanje Player-a
+-Razumjevanje okreta: Idi u Unity Inspector=> Transform=> Scale u X => i ukucaj u prvo okno X -1 (Player se okrece!)
+-Drugi nacin je => Inspector=> Sprite Renderer=> Flip (X (Chech)) Player se okrece...isto kao i u Transform Scale X!
+
+
+--------------------------------------------------------------------------------------------------------------------
+4.3.2- Prvo cemo inicijalizirati objekat u C# u VS-u preko kojeg cemo povezati Unity SpriteRenderer Metod Flip 
+
+SpriteRenderer spriteRenderer;
+
+void Start()
+{
+    myRenderer = GetComponent<SpriteRenderer>();  //Preko objekta SpriteRenderer imamo pristup Metodi Flip u Unity
+}
+
+
+------------------------------------------------------------------------------------------------------------------
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    //Inicial myRB object koji cemo prosljediti objektu knightPlayer za nj. Rigidbody2D
+    Rigidbody2D myRB;
+    SpriteRenderer myRenderer;
+
+    bool facingRight = true;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    /// <summary>
+    /// myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt knughtPlayer
+    /// i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+    /// 
+    /// </summary>
+    void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+        myRenderer = GetComponent<SpriteRenderer>();  //Preko objekta SpriteRenderer imamo pristup Metodi Flip u Unity
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        //novokreiranoj var move dodjeljujemo iz Unity Edit=> Project Settings=> Input=> Axis => Horizontal
+        float move = Input.GetAxis("Horizontal");
+
+        if (move > 0 && !facingRight)
+            Flip();
+        else if (move < 0 && facingRight)
+            Flip();
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y);
+    }
+
+    //Flip Metod postavljamo da provjeri facingRight, a zatim da postavi myRenderer.flipX 
+    private void Flip()
+    {
+        facingRight = !facingRight;           //Ako je facingRight jednak !facingRight
+        myRenderer.flipX = !myRenderer.flipX;  // tada mu dodjeljujemo !myRenderer.flipX
+    }
+}
+
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+4.4- Creating the Run Animation State    (Pravljenje Transfera za Run Animaciju)
+-------------------------------------------------------------------------------
+
+4.4.1- Iz Assets-> Animation folder => KnightRun i Drag'n'Drop KnightRun na Animator window
+(Prethodno select-mark KnightPlayer u Hierarchy i otvori Animator Window=> Layers=> BaseLayer))
+------------------------------------------------------------------------------------------------
+
+
+4.4.2- Mi zelimo da stanje sa "KnightIdle transferujemo na KnightRun". To radimo sa Transition Between States"(Animator win)
+
+a) D.Klik na KnightIdle "Make Transition" i zatim klik na KnightRun (Tada se pojavljuje linija koju nakacimo na KnightRun). 
+
+
+b) Uradit cemo i obrnutu Tranziciju => D.Klik na KnightRun "Make Transition" i zatim nakacenu liniju klik na KnightIdle.
+
+
+c) Postavi Frames: Klik na KnightRun" Animaciju u Animator win i postavi (Speed 2.5). Tako postavljamo 30 Frames po sekundi! 
+
+
+d) Klik na "STRELICU-Liniju" tj. PRVU TRANZICIJU vidi u Inspector se pojavljuje novi prozor u kojem pise Has Exit Time.
+-Otkacit cemo CheckedBox Has Exit Time za "KnightRun => KnightIdle".
+-Takodje Klik na "STRELICU-Liniju" tj. DRUGU TRANZICIJU i otkaci Has Exit Time i za "KnightRun => KnightIdle".
+(Sada kad pokrenemo nasu animaciju ONA NIKAD NECE OSTAVITI ODREDJENU RADNJU pa cemo dalje podesavati)
+
+
+e) Idi u Animator Window-u => desno ces vidjeti Tab Layer i Parameters => Klik na Parameters, vidjet ces List is Empty.
+-Tu odma iznad ima plus i na njega dodajemo novi parametar => Dodaj novi parametar Float => imenuj ga MoveSpeed 
+ (MoveSpeed koristimo za tranzciju od KnightIdle do KnightRun). 
+
+
+f) Klik na "STRELICU-Liniju" tj. PRVU TRANZICIJU KnightIdle->KnightRun i skrolaj Inspector do dna. Tu vidimo
+ Conditions, pise List is Empty.
+-Klik tu na Plus (dodali smo automatski MoveSpeed na PRVU TRANZICIJU "KnightIdle -> KnightRun").
+-Tu nam daje opciju switch ako je MoveSpeed veci od NULE (Greater), (a mi postavljamo momenat MoveSpeed  0.1).
+-Postavi sada (Greater (MoveSpeed  0.1) )
+
+g) A sada Klik na DRUGU TRANZICIJU "STRELICU-Liniju" tj. "KnightRun -> KnightIdle"
+ Klik na Plus i dodali smo automatski MoveSpeed na TRANZICIJU "KnightRun -> KnightIdle"
+-Postavi sada (Less (MoveSpeed  0.1) ) umjesto  (Greater)!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+
+
+h) Postavljane vremena switch u Chart u Inspector za PRVU TRANZICIJU KnightIdle->KnightRun:
+-Klik na "STRELICU-Liniju" tj. PRVU TRANZICIJU => klik na sredinu PLAVO-Oznaceno (gdje su postavljeni granicnici)...
+-Povuci oznaceno plavo blizu pocetka vremenske ose i smanji vrijeme svicha tako sto ces D.Klizac povuci i napraviti
+ jako mali vremenski period switch sa trake "KnightIdle na KnightRun". 
+
+i) Postavljane vremena svitch u Chart u Inspector za Drugu TRANZICIJU KnightRun -> KnightIdle:
+-Klik na "STRELICU-Liniju" TRANZICIJU  => klik na sredinu PLAVO-Oznaceno (gdje su postavljeni granicnici)...
+-Povuci oznaceno plavo blizu pocetka vremenske ose i smanji vrijeme svicha tako sto ces D.Klizac povuci i napraviti
+ jako mali vremenski period switch sa trake "KnightRun na KnightIdle". 
+
+
+j) U ANIMATORU => BaseLayer => Dva puta 2X Klik na KnightRun => U Inspector CheckIn Loop Time da prebaci tranziciju u Loop!
+   (U Inspector CheckIn Loop Time (Provjeri i za KnightIdle itd...!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!))
+
+
+
+k) Sada cemo ga jos iskodirati...
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+4.5. Writing the Run Animation Code  (Pravimo pristup u animatoru kroz Coding (Mecanim Animation System))
+----------------------------------
+4.5.1- Na pocetku PlayerController-a inicijaliziramo klasu: Animator myAnim;
+- zatim u Start metodi joj prosljedjujemo komponemtu: myAnim = GetComponent<Animator>();
+ i poslje u Update metodi postavljamo liniju koda koja postavlja Set Float koji smo kreirali u Amimator window-u
+ kao parameter na plus koji automatski dodaje property koji postavljamo u kodu VS-a:
+
+//MoveSpeed je naziv property-a iz Animator prozora, a variablu move prosljedjujemo kao absolut value (0 ili 1)
+myAnim.SetFloat("MoveSpeed", Mathf.Abs(move));
+
+---------------------------------------------------------------------
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    //Inicial myRB object koji cemo prosljediti objektu knightPlayer za nj. Rigidbody2D
+    Rigidbody2D myRB;
+ 
+    SpriteRenderer myRenderer;  //SpriteRenderer - Renders a Sprites for 2D Graphics
+
+    //Inicial myAnim Object da bi Povezali Animator sa kodom gdje postavljamo MoveSpeed itd.
+    Animator myAnim; // Povezujemo Animator sa kodom gdje postavljamo MoveSpeed itd.
+
+    bool facingRight = true;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+        // i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+        myRB = GetComponent<Rigidbody2D>();
+
+        myAnim = GetComponent<Animator>();
+
+        myRenderer = GetComponent<SpriteRenderer>();  //Preko objekta SpriteRenderer imamo pristup Metodi Flip u Unity
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        //novokreiranoj var move dodjeljujemo iz Unity Edit=> Project Settings=> Input=> Axis => Horizontal
+        float move = Input.GetAxis("Horizontal");
+
+        if (move > 0 && !facingRight)
+            Flip();
+        else if (move < 0 && facingRight)
+            Flip();
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y); //Linearni velocity od RigidBody
+
+        myAnim.SetFloat("MoveSpeed", Mathf.Abs(move));
+    }
+
+    //Flip Metod postavljamo da provjeri facingRight, a zatim da postavi myRenderer.flipX 
+    private void Flip()
+    {
+        facingRight = !facingRight;           //Ako je facingRight jednak !facingRight
+        myRenderer.flipX = !myRenderer.flipX;  // tada mu dodjeljujemo !myRenderer.flipX
+    }
+}
+
+
+
+
+================================================================================================================================
+================================================================================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===============================================================================================================================
+Rezerva za 4.
+===============================================================================================================================
+4- Adding Player Movement    (Movement  Code)
+--------------------------------------------------------------------------------------------------------------------------------
+4.1.1- Creating and Run Animation  
+
+- Sada cemo sliku knight-run podjeliti isto kao sto smo uradili sa knight-Idle.
+  Idemo u Assets => Sprites => Oznaci sliku "knight-run" => Inspector =>
+a) Sprite Mode: Multiple => Sprite Editor => Apply 
+b) U Sprite Editor-u => Clice => Type => Grid By Cell Size 
+c) Sada unosimo dimenzije koje tacno znamo koje smo postavili za slike koje smo licno radili!
+   
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+-------------------------------------------------------------------------------------------------------------------------------
+
+4.1.2- Kreiramo Animaciju (Kreiramo Brand New Animation)
+-Selektuj prvu sliku "knight-Run_0" zatim klik na Shift, zatim selektuj zadnju sliku u nizu "knight-Run_11"
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "KnightRun". 
+
+4.1.3- Sada KnightRun animaciju iz foldera Sprites DragNdrop u Animation folder.
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+4.2- Writing the Run Movement Code  (Add Component => C# Script PlayerController)
+---------------------------------------------------------------------------------
+4.2.1- Klik na folder Assets da kreiramo C# skriptu
+
+a) Selektuj KnightPlayer u Hierarchy i skrolaj Inspector do dna => Add Component => New Script
+b) Imenuj je PlayerController (NEMA ZAMJENE IMENA NAKON IMENOVANJA jer ce izbaciti ERROR!!!!!!!!!)
+c) Language C#   (ili je automatski postavljen C#)
+d) Create and Add 
+
+
+--------------------------------------------------------------
+
+4.2.2- Povezujemo Visual Studio ili MonoDevelop Unity
+-Idi na Edit => Preferences => External Tools => External Script Editor "Visual Studio 2017 Community
+
+4.2.3- Otvori skriptu u VS: 
+-Selektuj KnightPlayer u Hierarchy => skrolaj Inspector => Player Controller (Script)
+-U Player Controller (Script) odna ispod pise "PROZIRNO" Script PlayerController (Klik na OKNO PlayerController)
+
+
+4.2.4- Dodajemo code da povezemo na objekat RigidBody2D (Vazno je da izaberemo RigidBody2D,a ne RigidBody)
+------------------------------------------------------------
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+
+    Rigidbody2D myRB;
+
+    //Move
+    public float maxSpeed;
+
+
+    // Start is called before the first frame update
+    /// <summary>
+    /// myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+    /// i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+    /// 
+    /// </summary>
+    void Start()
+    {
+        myRB = GetComponent<Rigidbody2D>();
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        float move = Input.GetAxis("Horizontal");
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y);
+    }
+}
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+================================================================================================================================
+
+
+
+

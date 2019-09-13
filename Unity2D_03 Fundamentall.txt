@@ -1,0 +1,192 @@
+====================================================================================================================================
+Unity 2D Fundamentals - Character Control  by Brian Sinasac
+====================================================================================================================================
+3-Creating Our Character
+-----------------------------------------------------------------------------------------------------------------------------------
+3.1- Creating Our Character Asset
+----------------------------------
+3.1.1-Otvori Sprites folder -> selektuj-klik na sliku knight-Idle => Sprite Mode: Multiple => na dnu Inspector prozora Apply.
+     -selektuj-klik na sliku knight-Idle  => Sprite Editor => Slice =>
+
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------------------------------------------------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+      
+-----------------------------------------------------------------------------------------------------
+3.1.3- DragNdrop prvu ikonu knight-Idle_0 na Scene prozor-okno =>
+       Rename u prozoru Inspektor knight-Idle_0 u knightPlayer =>
+       Tag Player (Unity nam omogucuje umjesto nas da postavi Tag Player(Postavi Built-in Player u Tag padajucem meniju))
+       Order in Layer 10 (Playera uvjek postavljamo na gornji Layer u game-u)
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.2- Adding the Character Physics Components
+--------------------------------------------
+3.2.1- Oznacimo u Hierarchy knightPlayer i dodajemo mu RigidBody 2D => Add Component => Physics 2D => RigidBody 2D   
+
+3.2.2- Oznacimo u Hierarchy knightPlayer i dodajemo mu Collider da bi mogao odskakati u kontaktu sa colliderima.
+       Hierarchy knightPlayer => Add Component => Physics 2D => Capsule Collider 2D.
+       U prozoru Capsule Collider => Edit Collider => uredi ga tacno da prekrije Player Body (smanji obim kapsule)
+
+       U prozoru RigidBody 2D imamo Properties NPR. Mass gdje postavljamo tezinu Playera itd...
+
+
+3.2.3- U zadnjem dijelu videa objasnjava da mozemo dodati Player-u Box Collider na tijelo, a Circle Collider na noge i
+       na taj nacin NPR. Player moze uci u cijev ili pecinu tako sto ce mu u kodu iskljuciti Box Collider sa tijela.
+
+       Remove Component- Na kruzicu gdje imamo Reset tu imamo i Remove Component.
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.3- Creating Our First Animation (Animation States) 
+----------------------------------
+3.3.1- Oznacimo u Hierarchy knightPlayer zatim na dnu Inspector => Add Component => Miscellaneous => Animator.
+       (Add Component => Miscellaneous => Animator)
+
+3.3.2- Idi u Asset => u Folder Animation => D.klik => Create => Animator Controller .
+       imenuj ga KnightAC (Knight Animator controller). (imenuj ga: D.klik na nj. u Folder Animation=>Rename) 
+
+
+3.3.3- Sada cemo kreirati Animation State Machine koji cemo koristiti da gradimo nas Animation States:
+       Oznaci KnightPlayer u Hierarchy => skrolaj Inspektor do Animator => DragAndDrop KnightAC iz Animation foldera u
+       Inspector => Animator => Controller u "Okno Controller" (Vidjet ces u Animator-u Controller, Avatar itd)
+
+
+3.3.4- Sada idi gore na Window => Animator i vidjet ces kreirani Animation State!
+
+3.3.5- Sada zelimo kreirati Animaciju da je dodamo za Animate State.
+
+a) Idi u Sprites folder => oznaci prvu ikonu Idle => skrolaj ko zadnje ikone => Shift => klik.
+   (Time smo selektovali sve slike Idle)
+b) Klik na NPR. prvog viteza => D.klik => Create => Animation. Imenujemo ga KnightIdle.
+   (Kreirali smo Brand New Asset Animaciju)
+
+c) DragAndDrop KnightIdle u Asset => Animation folder. (ostanimo organizovani i spremajmo iteme properly)
+     
+
+d) Ponovo otvori Window => Animator (Ako je prazno oznaci u Hierarchy knightPlayer pa idi na prozor Animator=> Layers)
+   Sad kad vidimo kockice u Animation State sada DragAndDrop KnightIdle na Layers => Base Layer prozor!
+         
+e) Klik na Play i sada vidimo da nas se vitez krece veoma sporo. D.Kik na nasu animacij KnightIdle u prozoru Base State
+- Loop Time (Checked) (time postavljamo nasu animaciju da lupuje iznova forever)
+- Vracamo se u Base Layer i nasu animaciju klik samo jednom i otvaraju se u Inspectoru informacije o pojedinacnim stanjima 
+-Speed postavljamo na 2.5 (ubrzavamo PlayerIdle state)
+ (Ako selektujemo u Hierarchy knightPlayer i posmatramo Animator=>Base Layer vidimo kako puni loop proces line od KnightIdle)
+  (Ali pod uslovom da smo run-ovali game puni loop proces line od KnightIdle)
+
+================================================================================================================================
+================================================================================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+================================================================================================================================
+Rezerva
+================================================================================================================================
+3.1- Creating Our Character Asset
+----------------------------------
+3.1.1-Otvori Sprites folder -> selektuj-klik na sliku knight-Idle => Sprite Mode: Multiple => 
+     -selektuj-klik na sliku knight-Idle  => Sprite Editor => Slice =>
+-------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Nakon postavki => Slice
+-------------------------
+Zatvori i Apply
+-------------------------------------------------------------------------------------------
+
+Sada u Spite folderu na slici knight-Idle na meniju kada kliknemo otvaraju se odvojene slike viteza.
+      
+-----------------------------------------------------------------------------------------------------
+3.1.3- DragNdrop prvu ikonu knight-Idle_0 na Scene prozor-okno =>
+       Rename u prozoru Inspektor knight-Idle_0 u knightPlayer =>
+       Tag Player (Unity nam omogucuje umjesto nas da postavi Tag Player)
+       Order in Layer 10 (Playera uvjek postavljamo na gornji Layer u game-u)
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.2- Adding the Character Physics Components
+--------------------------------------------
+3.2.1- Oznacimo u Hierarchy knightPlayer i dodajemo mu RigidBody 2D. Add Component => Physics 2D => RigidBody 2D   
+
+3.2.2- Oznacimo u Hierarchy knightPlayer i dodajemo mu Collider da bi mogao odskakati u kontaktu sa colliderima.
+       Hierarchy knightPlayer => Add Component => Physics 2D => Capsule Collider 2D.
+       U prozoru Capsule Collider => Edit Collider => uredi ga tacno da prekrije Player Body (smanji obim kapsule)
+
+       U prozoru RigidBody 2D imamo Properties NPR. Mass gdje postavljamo tezinu Playera itd...
+
+
+3.2.3- U zadnjem dijelu videa objasnjava da mozemo dodati Player-u Box Collider na tijelo, a Circle Collider na noge i
+       na taj nacin NPR. Player moze uci u cijev ili pecinu tako sto ce mu u kodu iskljuciti Box Collider sa tijela.
+
+       Remove Component- Na kruzicu gdje imamo Reset tu imamo i Remove Component.
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+3.3- Creating Our First Animation (Animation States) 
+----------------------------------
+3.3.1- Add Component => Miscellaneous => Animator. (U Inspector skrolaj na dno => Add Component => Miscellaneous =>A.)
+       (Add Component => Miscellaneous => Animator)
+
+3.3.2- Idi u Asset => u predhodno kreirani folder Animation => D.klik => Create => Animator Controller .
+       imenuj ga KnightAC (Knight Animator controller).
+
+3.3.3- Sada cemo kreirati Animation State Machine koji cemo koristiti da gradimo nas Animation States:
+       Oznaci KnightPlayer u Hierarchy => skrolaj Inspektor do Animator => DragAndDrop KnightAC iz Animation foldera u
+       Inspector => Animator => Controller u "Okno Controller" (Vidjet ces u Animator-u Controller, Avatar itd)
+
+
+3.3.4- Sada idi gore na Window => Animator i vidjet ces kreirani Animation State!
+
+3.3.5- Sada zelimo kreirati Animaciju da je dodamo za Animate State.
+
+a) Idi u Sprites folder => oznaci prvu ikonu Idle => skrolaj ko zadnje ikone => Shift => klik.
+   (Time smo selektovali sve slike Idle)
+b) Klik na NPR. prvog viteza => D.klik => Create => Animation. Imenujemo ga KnightIdle.
+   (Kreirali smo Brand New Asset)
+
+c) DragAndDrop KnightIdle u Asset => Animation folder. (ostanimo organizovani i spremajmo iteme properly)
+     
+
+d) Ponovo otvori Window => Animator (Ako je prazno oznaci u Hierarchy knightPlayer pa idi na prozor Animator=> Layers)
+   Sada kad vidimo kockice u Animation State sada DragAndDrop KnightIdle na Layers => Base Layer prozor!
+         
+e) Klik na Play i sada vidimo da nas se vitez krece veoma sporo. Dubble Klik na nasu animacij KnightIdle u prozoru Base Layer
+- Loop Time (Checked) - (time postavljamo nasu animaciju da lupuje iznova forever)
+- Vracamo se u Base Layer i nasu animaciju klik samo jednom i otvaraju se u Inspectoru informacije o pojedinacnim stanjima 
+-Speed postavljamo na 2.5 (ubrzavamo PlayerIdle state)
+ (Ako selektujemo u Hierarchy knightPlayer i posmatramo Animator=>Base Layer vidimo kako puni loop proces line od KnightIdle)
+
+
+
+================================================================================================================================
+

@@ -1,0 +1,521 @@
+====================================================================================================================================
+Unity 2D Fundamentals - Character Control  by Brian Sinasac
+====================================================================================================================================
+5.1-Adding Player Jump
+------------------------------------------------------------------------------------------------------------------------------------
+5.1.1- Creating the Jump Animations
+
+Idi u Asset => Sprites => knight-jump 
+
+-----------------------------------
+- Sada cemo sliku knight-jump podjeliti isto kao sto smo uradili sa knight-Idle i knight-run. 
+  Idemo u Assets => Sprites => Oznaci sliku "knight-jump" => Inspector =>
+a) Sprite Mode: Multiple => Sprite Editor => Apply 
+b) U Sprite Editor-u => Slice => Type => Grid By Cell Size 
+c) Sada unosimo dimenzije koje tacno znamo koje smo postavili za slike koje smo licno radili! 
+   (Trebamo izracunati kako postaviti dimenzije!)
+-------------------------------------------------
+Type:        Grid By Cell Size
+Pixel Size:  X 158    Y 158
+Offset:      X 4      Y 6
+Padding:     X 8      Y 8
+
+Pivot:       Center
+
+Nakon postavki => Slice
+Zatvori Sprite Editor window i press Apply.
+-------------------------------------------
+Sada u Spite folderu na slici knight-jump na meniju "jezicku" kada kliknemo otvaraju se odvojene slike viteza. 
+
+
+--------------------------------------------------------------------------------------------------------------
+5.1.2- Sada cemo da Kreiramo 4 Brand New ANIMACIJE: Jump, Apex, Fall i Lend (Apex(ipeks)vrh eng. apex-peak))
+Ovdje se radi o drugacijem selektovanju gdje cemo iz knight-run napraviti VISE ANIMACIJA! 
+(NE samo jednu KAO STO SMO RADILI SA knight-Idle i knight-run)!!! 
+
+
+a) knightJump:
+-Selektuj kao prvu sliku "knight-jump_12" => klik Shift, zatim selektuj "knight-jump_16" kao zadnju u knightJump Animaciji
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "knightJump". 
+
+
+b) knightApex
+-Selektuj kao prvu sliku "knight-jump_16" => klik Shift, zatim selektuj "knight-jump_19" kao zadnju u knightApex Animaciji
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "knightApex". 
+
+
+c) knightFall 
+Selektuj od "knight-jump_19" do "knight-jump_23"
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "knightFall". 
+
+
+d) knightLand
+Selektuj od "knight-jump_23" do "knight-jump_39"
+-D.Klik na jednu od slika NPR. zadnju slika => Create Animation i imenuj novokreiranu animaciju "knightLend". 
+-------------------------------------------------------------------------------------------------------------
+5.1.3- Sada knightRun animacije iz foldera Sprites Drag'n'Drop u Animation folder. 
+      (Sada knightRun animacije iz foldera Sprites Drag'n'Drop u Animation folder).
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+5.2- Preparing the Assets for Jump
+------------------------------------
+
+5.2.1- Postavit cemo Layere iz preFabs za sve objekte na sceni jer postavke iz preFabs override-aju sve ostale individualne
+ (individualne postavke kao NPR. Layer za neki objekat koji postavimo iz Hierarchy)! 
+       
+
+5.2.2- Prvo cemo identificirati sve objekte na sceni sa kojih nas karakter moze da skoci-odskoci.
+ a) Ako kliknemo na objekat grassPlatformMedium vidimo mu da je u Inspector-u postavljen Layer Default.
+    (Layer Default se nalazi na vrhu inspector-a GORE DESNO. Lijevo od njega je Tag Untaged, a ispod Overrides button...)
+ b) Sada ako klik na Default Button da dodamo (DA DODAMO) nas vlastiti Layer, vidimo da je tek NPR. 8. dostupan => Add Layer
+ c) Imenujemo ga "Ground" => Ukucaj u 8. Layer: Ground. Poslje u kodu cemo ga koristiti kada Player stoji na Ground-u.
+    (Sada imamo Layer koji cemo koristiti kada player stoji na Ground-u)
+
+Napomena: Ako postavimo Layer za objekat iz Hierarchy on je tada postavljen samo na nivou Hierarchy...
+          ali ako postavimo Layer za objekat iz preFabs TADA JE POSTAVKA POSTAVLJENA NA NIVOU CIJELE SCENE!
+          (Uobicajeno je da se praktikuje postavka iz preFab da nebi doslo do problema u slucaju da imamo vise objekata)
+
+5.2.3- Otvori preFabs => Klik na objekat u Hierarchy => zatim u Inspector klik na Select Button 
+      (vidjet ces da je POZUTILA "odredjena slika" u preFabs)
+      zatim se vrati da oznacis isti objekat u Hierarchy=> Inspector => Overrides => Apply All
+
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+5.2.4-U kodu cemo uraditi jedan tanki krug-Cyrcle za noge naseg viteza i ako taj krug dotakne objekat na koji padne tada ce
+       nas vitez ponovo moci da skoci.
+
+a) Markiraj-oznaci knightPlayer u Hierarchy => GameObject => Create Empty Child 
+   (Sada imamo knightPlayer-ov child koji se zove GameObject)
+
+b) Preimenuj GameObject u GroundCheckLocation. Oznaci knightPlayer u Hierarchy Idi u Inspector i Preimenuj.
+
+c) Identificiranje Lokacije objekta GroundCheckLocation na sceni: (Jedini nacin da otkrijemo lokaciju objekta G.C.L.)
+- Markiraj-oznaci u Hierarchy objekat GroundCheckLocation => Inspector =>
+  Lijevo na vrhu imamo KOCKU (sivu kocku)=> klik na kocku => klik na boju ZELENU.
+- Ako se Pojvavi predugacki zeleni objekat (TO SU SAMO DUGA SLOVA OBJEKAT JE MALI (vidi se kao mali krug tu u slovima))! 
+
+
+- Klik na Move Tool to je gore lijevo i postavi GroundCheckLocation na dno nogu Player-a! 
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+5.3- Working in the Animator 
+-------------------------------------------------------------------------------------------------------------------------------
+5.3.1- Klik u Hierarchy na knightPlayer => klik na Animator window.
+ Drag'n'drop knightLand u Animator window
+ (Ovo sada cemo raditi sasvim brand new da bi razumjeli kako radi Velocity za sljetanje i dizanje u animaciji!)
+----------------------------------------------------------------------------
+5.3.2- Postavljamo polja za Code: Klik na parameters TAB u Animator window-u => ispod njega desno se nalazi plus (+)
+a) Klik na plus i odaberi Float => imenuj ga VerticalVelocity
+b) Ponovo Klik na plus i odaberi Bool => imenuj ga isGrounded
+---
+VerticalVelocity
+isGrounded
+---
+------------------------------------------------------------------------------
+5.3.3- D. Klik na knightLand => Make Transition:
+a) Postavi strelicu sa knightLand na KnightIdle.
+b) Klik na sredinu linije na strelicu i u inspektoru se pojavljuje vizuelni prikaz za Transition od knightLand->KnightIdle. 
+c) Ostavljamo Checked Has Exit Time.
+d) Postavljamo klizace na sami pocetak knightLand (Od Nule) (Dakle jako mali razmak klizaca postavljamo (vrijeme za Landing)) 
+   (Ako nestane Prozor sa klizacima za postavljanje Tranzicije => IDI NA EDIT => Undo Tranziciju itd!!!)
+
+
+e) Klik duble na knightLand u Animator window-u i provjeri dali je postavljen na 12 FPS (otvara se novi win.. 12 FPS)
+
+f) Klik jednom na knightLand i postavi Speed 2.5 (Sada ce se FPS (Frame Per Second ponasati kako treba))!!!
+
+------------------------------------------------------------------------------------------------------------------------------
+5.3.4- Sada postavljamo landing-sljetanje za ovu scenu!? (Ovo je BRAND NEW MANIR U OVOM VIDEU!!!)
+
+a) D.Klik na prazan prostor u window Animator => Base Layer window-u => Create State => From New Blend Tree !
+   (Kreirao se Blend Tree vizuelna kockica u Animator => Base Layer window-u)
+b) Jedan klik na Blend Tree => u Inspector na vrhu izmjeni naziv Blend Tree u Jump Blend Tree.
+c) Posto zelimo da povezemo Jump iz svih States da nebi radili iz svakog pojedinacno...Srecom po Default-u
+   u Animator win. imamo State koji se "zove Any State".
+
+d) D.klik na Any State => Make Transition => postavi strelicu prema Jump Blender Tree.
+---------
+e) Klik na strelicu Transition da PREGLEDAMO TRANZICIJU Any State=>Jump Blend Tree U Inspektoru
+- Pogledaj Conditions dole ispod vizuelnog prikaza tranzicije. Pise List is Empty!
+- Klik na plus tu ispod da dodas uslov-condition 
+ (gdje zelim da postavim uslov kad moj player vise nije prizemljen)
+- Postavljamo: isGrounded: false
+-Iskljuci za TRANZICIJU Any State=>Jump Blend Tree Can transaction To Self "CheckOf"
+
+(Znaci: Ako moj Player nije grounded-prizemljen onda je ili Jumping, Land, Apex ili Fall)
+Jos jednom:Ako Player nije grounded onda je u Jump => vidi tranziciji STRELICU na Jump Blend Tree razumjevanje!
+(Za tranziciju Any Statr=> Jump Blend Tree  postavljamo klizace isto kao i prije na mali razmak i na pocetak")
+
+
+
+f) Ako je: isGrounded: true mi znamo da je player dotakeo tlo-ground.
+- D.klik na Jump Blend Tree => Make Transition i povuci strelicu na knightLand (Jump Blend Tree => knightLand).
+- Zatim klik na transition Jump Blend Tree=> knightLand i iskljuci Has Exit Time uslov (CheckedOut)
+- Zatim u Insp. na dnu dole dodaj Condition na Plus: isGrounded: true 
+
+
+--------------------------------------------------------------------------------
+5.3.5- Pogledajmo malo bolje ovaj detalj kako mozemo npr. napraviti tranziciju iz Jump-a na Jump:
+- Klik na transition od "Any State=> Jump Blend Tree" => u Inspector win imamo Setings => klik na strelicu Setings
+- U Setings imamo opciju da napraviti tranziciju iz Jump-a na Jump...Can transition To Self.
+- Chech Of opciju: Can transition to Self (CheckOut). Mi ne zelimo da Player iz state Jump moze da skoci!
+- Zatim u Inspectoru gdje je graficki prikaz tranzicije "klizace posavi" tako da bude jako malo vrijeme tranzicije
+ za Any State-Jump Blender Tree. (Povuci plavo zagradjeno malo iza vremenske ose i smanji raspon na 10% od 0:10)
+
+-Sada klik na transition strelicu od "Jump Blender=> Tree-knightLand" i zatim u Inspectoru gdje je graficki prikaz
+ tranzicije "klizace posavi" tako da bude jako malo vrijeme tranzicije.
+
+Isto tako postavi klizace i za Tranziciju Jump Blend Tree=> KnightLand
+
+
+
+---------------------------------------------------------------------------!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+5.3.6- Blend Tree (POGLEDAJMO BLEND TREE "jer CINI NAM SE KAO svaki drugi State")
+
+a) Klik (2x) duble click na Blend Tree i otvara se sasvim novi win iz Base Layer-a otvara novi Tab Blend Tree.
+   (Vidimo da u win Animator iz Base Layer imamo otvoren novi Tab Jump Blend Tree.)
+   Klikom na Base Layer izlazimo iz novog Tab-a nazad u Base Layer.
+
+
+Ponovo duble click na Jump Blend Tree da otvorimo novi Jump Blend Tree (U Animator=> Base Layer=> u Bland Tree).
+b) U Animator=> Base Layer=> u Bland Tree => Klik na state Bland Tree i u Inspector Rename state u Jump Blend Tree. 
+c) U Animator=> Base Layer=> u Bland Tree => Klik na novi Jump Blend Tree state,a zatim u Inspector postavi gdje 
+   je Parameter: VerticalVelocity (Postavi VerticalVelocity)
+
+d) Kako da dodamo States: Ispod parameter imamo Motion i tu ispodi imamo List is Empty => na plus
+   dodaj: Add Motion Field => pa zatim dodajem drugi put => Add Motion Field)
+   (SADA SMO DOBILI GRAPH 3d KOJI NAD OMOGUCUJE BLEND Between STATES "Blendovanje medju stanjima"(Switch States))
+   
+e) TRECI PUT zatim dodajem => Add Motion Field (za trece BLEND Between STATES koje vidimo u Grafu)
+
+
+f) Sada imamo prazna polja u Motion koja cemo popuniti dodavaljem "Drag'N'Drop" animacija iz foldera Animation:
+- PRVI Drag'N'Drop ANIMACIJU knightApex u prvo Motion Field 
+- DRUGI Drag'N'Drop ANIMACIJU knightFall u drugo Motion Field 
+- TRECI Drag'N'Drop ANIMACIJU knightJump u trece Motion Field  (Ima slika u dokumentaciji)
+
+  (Znaci: Vertikalnu Velociti vrijednost svichujemo-blendamo ovdje izmedju ova tri States, a 
+   to radimo preko Thrashold Fields tako sto im postavljamo parametre (vidi sliku))!
+  
+
+
+g) Postavljamo BLEND Between STATES preko Threshold polja za nase animacije u Blend Tree. 
+   Threshold-i su automatski postavljene na: knightApex 0, knightFall 0.5, knightJump 1, pa
+   treba ukljuciti opciju za manuelno unosenje Thrashold-a.
+
+h) Prvo iskljucimo "Automate Threshold" opciju. Sada su polja Thrashold Avalible za izmjenu i nas upis!
+
+
+i) Postavi REDISLJED ovo da bi Player bio u Jump-u!
+-Postavi u Blenderu za knightApex Thrashold : -1
+-Postavi u Blenderu za knightFall Thrashold : 0.5
+-Postavi u Blenderu za knightJump Thrashold : 2
+
+(Ako ne budes mogau unositi vrijednosti redosljedom ONDA KRENI ODOZDO OD knightJump Thrashold : 2)!!!!!!!!!!!!!!!!
+-----------------
+
+ (Vidimo da se izmjenio izgled na "pod-blender tree" Graph-u)
+
+Objasnjenje -teorija (Ovo nije postavka koju treba postaviti)
+Kada se player pokrene u pozitivni velocity zapravo moj player je u Jump-u!
+ (Ako postavimo knightFall Thrashold  -1 onda je player totalnom padu!
+  Ako postavimo knightApex Nula Thrashold : 0  tad je sasvim u Apex animaciji...
+  Ako postavimo knightJump Thrashold: vise od dva (>2) tada bi bili kompletno u Jump animaciji!) 
+ (Sve ove vrijednosti Thrashold treba testirati individualno da bi napravili ono sto zelimo!)
+
+
+
+
+j) Changed Animation Speed - postavka za VRIJEME koja se nalazi pored Thrashold kolone (Vidi se oznaka kao SAT)
+
+-Postavi knightFall Speed 1   (jer zelimo da ostane isto BRZ)    knightFall Speed 1
+-Postavi knightApex Speed 0.5 (jer zelimo da bude malo sporiji) knightApex Speed 0.5 
+-Postavi knightJump Speed 0.5 (jer zelimo da bude malo sporiji) knightJump Speed 0.5
+
+(Mozemo da mijenjamo brzinu i preko Win=> Animator=> Base Layer=> klik na anim aciju npr. KnightIdle=> Inspector=> Speed)!
+
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+5.4- Jump Code (Ovdje je objasnjen samo code koji je dodat u ovom dijelu videa tako da bi bolje razumjeli)
+--------------------------------------------------
+5.4.1- Jump Code plus dodaci.
+-------------------------------
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    //Inicial myRB object koji cemo prosljediti objektu knightPlayer za nj. Rigidbody2D
+    Rigidbody2D myRB;
+
+    SpriteRenderer myRenderer;  //SpriteRenderer - Renders a Sprites for 2D Graphics
+
+    //Inicial myAnim Object da bi Povezali Animator sa kodom gdje postavljamo MoveSpeed itd. 
+    Animator myAnim; // Povezujemo Animator sa kodom gdje postavljamo MoveSpeed itd.
+
+    bool facingRight = true;
+
+    //Move
+    public float maxSpeed;
+
+    //Jump
+    bool grounded = false; //Kad god je Player na zemlji "grounded je = TRUE" (postavljamo ga u Update metodi)
+
+    //Kreirat cemo varijable za provjeru kruga kod Player-a "baziranih na player brzini": Radius ,
+     // Layer koji ce provjeravati Radius, Lokaciju gdje pravimo krugove 
+    float groundCheckRadius = 0.2f; // groundCheckRadius ce provjeravati lokaciju player-a 
+    //(ako koristimo drugi asset vjerovatno treba izmjeniti vrijednost 0.2f;)
+
+    //LayerMask we using only to identify our circle against- koristimo ga za identifikujemo naseg krugu. U nasem slucaju je to groundLayer 
+    public LayerMask groundLayer;
+    //Transform je nakacen na player-ove noge..dodat cemo ga poslje u inspector-u na odredjeni objekat ili komponentu...
+    public Transform groundCheck; //ovdje postavljamo provjeru da je player na zemljiProvjera-groundCheck 
+
+    public float jumpPower; //je kolicina snage koju postavljamo da bi player mogao da skoci kako treba
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+        // i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+        myRB = GetComponent<Rigidbody2D>();
+
+        myAnim = GetComponent<Animator>();
+
+        myRenderer = GetComponent<SpriteRenderer>();  //Preko objekta SpriteRenderer imamo pristup Metodi Flip u Unity
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        //ako je player grounded i ako je pritisnut input button tada je player treba da skoci, a to ce izvrsiti tijelo u if-u!!!
+        if (grounded && Input.GetAxis("Jump") > 0)
+        {
+            // Da bi Player skocio prvo postavljamo da vise nije grounded-prizenljen pa ga setujemo false; 
+            myAnim.SetBool("isGrounded", false); // Sada player zna da vise nije grounded i da ide iz Any State na Jump Blend Tree
+            //setujemo da Jump uvjek ima isti visinu tako sto dodjeljujemo X, a Y iskljucujemo
+            myRB.velocity = new Vector2(myRB.velocity.x, 0f); //Sada kad je Y velocity setovan na "0" mi startujemo FROM FRESH EACH TIME
+
+            //Forsiramo Jump na NULU da nebi imali promjene u JUMP-u, a "ForceMode2D.Impulse" opcija aplicira Force ALL at ONCE! 
+            myRB.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse); //AddForce se aplicira na RigidBody na poseban nacin!
+
+            grounded = false; //Sada ne samo da znamo da je u Animatoru ostavljen grounded nego i ovdje u skripti grounded je false 
+        }
+
+        //Sada postavljamo dali je mali krug doatakeo tlo "groundLayer" to moramo provjeriti za Every Single Frame 
+        //OverlapCurcle funkcija kreira mali krug za player-a "vidi iznak CODE"!
+        //Drugi parametar u OverlapCircle postavlja "build the Radius of my Curcle", a TRECI LayerMask groundLayer
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        myAnim.SetBool("isGrounded", grounded); // Sada update-uje animator svaki Single Frame
+
+        //NAKON STO SMO ZAVRSILI KODIRANJE IZ VJEZBE "5.4.1- Jump Code" IDEMO NA PLAYER ,a u Inspectoru postavljamo vidi dalje
+        //===============================================================================================================================
+
+        //Ovo je iz vjezbe prije 5.1 (Dakle prije Adding Player Jump)
+        //novokreiranoj var move dodjeljujemo iz Unity Edit=> Project Settings=> Input=> Axis => Horizontal
+        float move = Input.GetAxis("Horizontal");
+
+        if (move > 0 && !facingRight)
+            Flip();
+        else if (move < 0 && facingRight)
+            Flip();
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y); //Linearni velocity od RigidBody
+
+        myAnim.SetFloat("MoveSpeed", Mathf.Abs(move));
+    }
+
+    //Flip Metod postavljamo da provjeri facingRight, a zatim da postavi myRenderer.flipX 
+    private void Flip()
+    {
+        facingRight = !facingRight;           //Ako je facingRight jednak !facingRight
+        myRenderer.flipX = !myRenderer.flipX;  // tada mu dodjeljujemo !myRenderer.flipX
+    }
+}
+
+ 
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+5.4.2-Postavka za Jump kod za Player-a u Unity u Inspector-u (vracamo se iz VS-a u Unity da povezemo varijable)
+a) U Hierarchy klik na KnightPlayer => Inspector window => skrolaj dole do Player Controller (Scrypt)
+   (U Player Controller (Scrypt) imamo mnostvo public opcija koje mozemo da zamjenimo)
+
+b) Postavi: (Selektuj KnightPlayer)
+- Ground Layer : Ground
+- Ground Check : E, ovdje pise None Transform "dakle ocekuje transform"! Ovo cemo setovati specificno preko frontenda i to:
+  otvori u Hierarchy na strelicu KnightPlayer i uzmi GroundCheckLocation zatim je Drag'N'Drop u "Ground Check" okno gdje
+  pise None Transform u Player Controller-u.
+
+-Jump Power: 15 (Postavit cemo na 15 da skoci malo vise, a poslje vratiti kako nam odgovara)
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------------------------
+5.5- 
+
+
+
+ 
+================================================================================================================================
+================================================================================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+===============================================================================================================================
+Rezerva koda iz vjezbe: 5.4.1- Jump Code
+===============================================================================================================================
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class PlayerController : MonoBehaviour
+{
+    //Inicial myRB object koji cemo prosljediti objektu knightPlayer za nj. Rigidbody2D
+    Rigidbody2D myRB;
+
+    SpriteRenderer myRenderer;  //SpriteRenderer - Renders a Sprites for 2D Graphics
+
+    //Inicial myAnim Object da bi Povezali Animator sa kodom gdje postavljamo MoveSpeed itd. 
+    Animator myAnim; // Povezujemo Animator sa kodom gdje postavljamo MoveSpeed itd.
+
+    bool facingRight = true;
+
+    //Move
+    public float maxSpeed;
+
+    //Jump
+    bool grounded = false; //Kad god je Player na zemlji "grounded je = TRUE" (postavljamo ga u Update metodi)
+
+    //Kreirat cemo varijable za provjeru kruga kod Player-a "baziranih na player brzini": Radius , Layer koji ce provjeravati Radius, Lokaciju gdje pravimo krugove 
+    float groundCheckRadius = 0.2f; // groundCheckRadius ce provjeravati lokaciju player-a "(ako koristimo drugi asset vjerovatno treba izmjeniti vrijednost 0.2f;)"
+
+    //LayerMask we using only to identify our circle against- koristimo ga za identifikujemo naseg krugu. U nasem slucaju je to groundLayer 
+    public LayerMask groundLayer;
+    //Transform je nakacen na player-ove noge..dodat cemo ga poslje u inspector-u na odredjeni objekat ili komponentu...
+    public Transform groundCheck; //ovdje postavljamo provjeru da je player na zemljiProvjera-groundCheck 
+
+    public float jumpPower; //je kolicina snage koju postavljamo da bi player mogao da skoci kako treba
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        // myRB dodjeljujemo BuiltIn metod GetComponent koji je nakacen u Hierarchy na objekt KnughtPlayer
+        // i koji ima komponentu Rigidbody2D, a GetComponent prima Rigidbody2D i postavlja je za "myRB"
+        myRB = GetComponent<Rigidbody2D>();
+
+        myAnim = GetComponent<Animator>();
+
+        myRenderer = GetComponent<SpriteRenderer>();  //Preko objekta SpriteRenderer imamo pristup Metodi Flip u Unity
+    }
+
+    // Update is called once per frame
+    /// <summary>
+    /// GetAxis je BuiltIn metoda input klase koji prosljedjujemo.
+    /// To mozemo lako razumjeti ako odemo u Unity => Edit => Project Settings => Input => Axes => Horizontal
+    /// </summary>
+    void Update()
+    {
+        //ako je player grounded i ako je pritisnut input button tada je player treba da skoci, a to ce izvrsiti tijelo u if-u!!!
+        if (grounded && Input.GetAxis("Jump") > 0)
+        {
+            // Da bi Player skocio prvo postavljamo da vise nije grounded-prizenljen pa ga setujemo false; 
+            myAnim.SetBool("isGrounded", false); // Sada player zna da vise nije grounded i da ide iz Any State na Jump Blend Tree
+            //setujemo da Jump uvjek ima isti visinu tako sto dodjeljujemo X, a Y iskljucujemo
+            myRB.velocity = new Vector2(myRB.velocity.x, 0f); //Sada kad je Y velocity setovan na "0" mi startujemo FROM FRESH EACH TIME
+
+            //Forsiramo Jump na NULU da nebi imali promjene u JUMP-u, a "ForceMode2D.Impulse" opcija aplicira Force ALL at ONCE! 
+            myRB.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse); //AddForce se aplicira na RigidBody na poseban nacin!
+
+            grounded = false; //Sada ne samo da znamo da je u Animatoru ostavljen grounded nego i ovdje u skripti grounded je false 
+        }
+
+        //Sada postavljamo dali je mali krug doatakeo tlo "groundLayer" to moramo provjeriti za Every Single Frame 
+        //OverlapCurcle funkcija kreira mali krug za player-a "vidi iznak CODE"!
+        //Drugi parametar u OverlapCircle postavlja "build the Radius of my Curcle", a TRECI LayerMask groundLayer
+        grounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        myAnim.SetBool("isGrounded", grounded); // Sada update-uje animator svaki Single Frame
+
+        //NAKON STO SMO ZAVRSILI KODIRANJE IZ VJEZBE "5.4- Jump Code" IDEMO NA PLAYER ,a u Inspectoru postavljamo vidi dalje
+        //====================================================================================================================
+
+        //Ovo je iz vjezbe prije 5.1 (Dakle prije Adding Player Jump)
+        //novokreiranoj var move dodjeljujemo iz Unity Edit=> Project Settings=> Input=> Axis => Horizontal
+        float move = Input.GetAxis("Horizontal");
+
+        if (move > 0 && !facingRight)
+            Flip();
+        else if (move < 0 && facingRight)
+            Flip();
+
+        myRB.velocity = new Vector2(move * maxSpeed, myRB.velocity.y); //Linearni velocity od RigidBody
+
+        myAnim.SetFloat("MoveSpeed", Mathf.Abs(move));
+    }
+
+    //Flip Metod postavljamo da provjeri facingRight, a zatim da postavi myRenderer.flipX 
+    private void Flip()
+    {
+        facingRight = !facingRight;           //Ako je facingRight jednak !facingRight
+        myRenderer.flipX = !myRenderer.flipX;  // tada mu dodjeljujemo !myRenderer.flipX
+    }
+}
+=================================================================================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

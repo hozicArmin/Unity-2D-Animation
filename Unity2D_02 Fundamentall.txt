@@ -1,0 +1,199 @@
+====================================================================================================================================
+Unity 2D Fundamentals - Character Control by Brian Sinasac
+====================================================================================================================================
+2-Project Overview and Creating Our First Assets
+------------------------------------------------------------------------------------------------------------------------------------
+2.1- Project Overview
+---------------------
+2.1.1- U Assets folderu kreiramo nove foldere: Animation, preFabs, Scripts, Sprites i Scenes ako nema.
+2.1.2- MainScene ili SimpleScene postavljamo u folder Assets => Scenes.
+2.1.3- Assets => Sprites D. klik u prozoru Sprites i Import New Asset... (Dodajemo slike u folder)
+--------------------------------------------------------
+2.1.4-Posto u Sprites imamo sliku koja sadrzi vise slika sada cemo je podjeliti da je mozemo odvojeno koristiti:
+     a) Klik na sliku i pojavljuje se Inspector window koji cemo podesiti i u kojem cemo podjeliti sliku.
+        Texture Type Sprite 2D and UI ,  Spite Mode => Multiple
+     b) Idi na Button Sprite Editor => Apply. 
+     c) Sada se pojavljuje novi prozor Sprite Editor...
+     d) Postavke su Type Automatic, Pivot Center i sada idi na Slice Button (time smo obrubili slike)
+     e) Zatvori Sprite Editor prozor i klik na Apply (time dobijamo nove tri slike u Assets-> Sprites)
+     ---------------------------------------------------
+2.1.5- Iz Sprites Drag'n'Drop sliku na Scenu -> klik na sliku u sceni i pojavljuje se Inspector prozor
+     a) Postavljanje slike na centar: Podesimo pozicije i rot. na NULU ili u Transform oknu DESNO klik na
+        kruzni padajuci meni -> Reset.
+     b) Sada preimenujmo sliku na GlasPlatformLarge (Vidimo da se preimenovala i u Hierarchy prozoru). 
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.2- Creating the Assets           (Ovdje dodajemo Fizicki objekat za nasu sliku)+(PreFabs )
+--------------------------
+2.2.1- Sada dodajemo nesto sto ce nasu sliku povezati sa "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D.
+       a) U prozoru Box Collider 2D takodje mozemo mijenjati velicinu slike na Size.
+       b) U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno, a
+          TO ZNACI DA TU MOZEMO POSTAVITI GRANICE U SAMOJ SLICI NPR. u travi GDJE CE Player imati afekt!
+
+2.2.2- PreFabs - Sada uredjenu sliku iz Hierarchy drag'n'drop u prefab folder. 
+       Tako cemo moci ovu sliku koristiti uvjek iznova i iznova kao uredjenu tj. reusable kao C# BaseClass.
+
+2.2.3- Sada idemo dalje sa postavljanjem objekata na scenu pa dodajemo sliku travu Medium size i pomjeramo
+       prije postavljenu grassPlatformLarge na stranu da bi uredili medium. reimenujemo je grassPlatformMedium.
+       Sada dodajemo isto kao i prvoj slici "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D
+       U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno.
+
+2.2.4- Isto tako povezati sa "2D fizickim engine i Editovati collider i za grassPlatformSmall.
+       
+2.2.5- Sada kad imamo uredjene slike u preFabs folderu mi mozemo brisati slike iz Hirarchy prozora, a
+       dodavati po potrebi slike iz preFabs.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.3- Rendering and Parallax (Paralaksa je Prividan položaj objekta vidjen iz dve razlicite tacke koje nisu u liniji sa objektom)
+-------------------------------------
+2.3.1- Postavljanje background-a i Layer-a (Layers in Depth)
+ 
+      a) Otvori Sprites folder => dragdrop grassPlatform... prvu najduzu sliku u Hierarchy prozor. Vidjet ces pojavljuje u Scene
+         prozoru.. ona prva origilanlna slika grassPlatformsFiltered_0 (Prije toga sam selektovao sliku koja je bila na u sceni!)
+      b) Preimenovat cemo je u grassPlatformLargeBG 
+      c) Sada idemo na Color bijelo okno i D. klik na. Tu cemo je izmjeniti da ne izgleda zeleno kao druge slike (R100, G80, B50)
+         zatim je DragDrop u folder preFabs
+
+
+
+2.3.2- Sad postavljamo Background- Order in Layer npr. na -10. To se naziva "Zed fighting" ali to nema veze sa Z-osom-tackom!
+       U smislu Layer-a Unity funkcionise tako da Layere postavljamo(Order in Layer (-10 NPR ce postaviti iza 0),a ne po tacki Z).
+       Unity ne funkcionise tako da postavljamo 2D nego trazi da postavljamo podatke npr. u Inspector window!
+
+
+2.3.3- Prefab Apply: Da bi nas preFab imao uvjek startne vrijednosti idemo na vrh inspector-a gdje je Prefab i u toj liniji
+       imamo Prefab Select Revert Apply  ( ili Overrides.....)
+       a) Selektuj objekat u Hierarchy => Overrides => Otvara se podprozor koji ima kvaciciu pa klik na nj. i tu se otvara jos
+          jedan novi prozor tzv. Override => Apply
+
+       b) Selektuj objekat u Hierarchy => Overrides => Apply All nakon Apply-a ili All Apply svaki put kad DragDrop sliku
+          iz Prefab-a postavimo na scenu imati cemo unesene vrijednosti iste!
+----------------------------------------------------------------------
+grassPlatformLargeBG  Order in Layer -10  (zatim Apply ili All Apply)
+grassPlatformMedium   Order in Layer  -9  (zatim Apply)
+grassPlatformSmall    Order in Layer  -8  (zatim Apply)
+grassPlatformLarge    Order in Layer  -1  (zatim Apply)
+grassPlatformMedium   Order in Layer   0  (zatim Apply)
+grassPlatformSmall    Order in Layer   1  (zatim Apply)
+------------------------------------------------------------------------
+
+
+==================================================================================================================================
+==================================================================================================================================
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==================================================================================================================================
+Rezerva
+==================================================================================================================================
+2-Project Overview and Creating Our First Assets
+------------------------------------------------------------------------------------------------------------------------------------
+2.1- Project Overview
+---------------------
+2.1.1- U Assets folderu kreiramo nove foldere: Animation , preFabs , Scripts , Sprites i Scenes ako nema.
+2.1.2- MainScene ili SimpleScene postavljamo u folder Assets => Scenes.
+2.1.3- Assets => Sprites D. klik u prozoru Sprites i Import New Asset... (Dodajemo slike u folder)(Nakon importa idi ispod)
+
+-------------------------------------------------------------------------------------------
+2.1.4-Posto u Sprites imamo sliku koja sadrzi vise slika sada cemo je podjeliti da je mozemo odvojeno koristiti:
+     a) Klik na sliku grassPlatformsFiltered i pojavljuje se Inspector window koji cemo podesiti i u kojem cemo podjeliti sliku.
+        Texture Type Sprite 2D and UI ,  Spite Mode => Multiple 
+     b) Idi na Button Sprite Editor => Apply. 
+     c) Sada se pojavljuje novi prozor Sprite Editor...
+     d) Postavke su Type Automatic, Pivot Center i sada idi na Slice Button (time smo obrubili slike)
+     e) Zatvori Sprite Editor prozor i klik na Apply (time dobijamo nove tri slike u Assets-> Sprites)
+---------------------------------------------------
+
+2.1.5- Iz Sprites Drag'n'Drop sliku na Scenu -> klik na sliku u sceni i pojavljuje se Inspector prozor
+     a) Postavljanje slike na centar: Podesimo pozicije i rot. na NULU ili u Transform oknu DESNO klik na
+        kruzni padajuci meni -> Reset.
+     b) Sada preimenujmo sliku na GrassPlatformLarge (Vidimo da se preimenovala i u Hierarchy prozoru). 
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.2- Creating the Assets           (Ovdje dodajemo Fizicki objekat za nasu sliku) + (PreFabs )
+--------------------------
+2.2.1- Sada dodajemo nesto sto ce nasu sliku povezati sa "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D. 
+       a) U prozoru Box Collider 2D takodje mozemo mijenjati velicinu slike na Size.
+       b) U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno, a
+          TO ZNACI DA TU MOZEMO POSTAVITI GRANICE U SAMOJ SLICI NPR. u travi GDJE CE Player imati afekt! 
+
+2.2.2- PreFabs - Sada uredjenu sliku iz Hierarchy drag'n'drop u prefab folder. 
+       Tako cemo moci ovu sliku koristiti uvjek iznova i iznova kao uredjenu tj. reusable kao C# BaseClass.
+
+2.2.3- Sada idemo dalje sa postavljanjem objekata na scenu pa dodajemo sliku travu Medium size i pomjeramo
+       prije postavljenu grassPlatformLarge na stranu da bi uredili medium. reimenujemo je grassPlatformMedium.
+       Sada dodajemo isto kao i prvoj slici "2D fizickim engine".
+       Klik u Hierarchy na imeSlike koju povezujemo => Add Component => Physics 2D => Box Collider 2D
+       U prozoru Box Collider 2D na Button-u Edit Collider mozemo mijenjati Collider postavku manuelno.
+
+2.2.4- Isto tako povezati sa "2D fizickim engine i Editovati collider i za grassPlatformSmall.
+       
+2.2.5- Sada kad imamo uredjene slike u preFabs folderu mi mozemo brisati slike iz Hirarchy prozora, a
+       dodavati po potrebi slike iz preFabs.
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------
+2.3- Rendering and Parallax (Paralaksa je Prividan položaj objekta vidjen iz dve razlicite tacke koje nisu u liniji sa objektom)
+-------------------------------------
+2.3.1- Postavljanje background-a i Layer-a (Layers in Depth)
+ 
+      a) Otvori Sprites folder => dragdrop grassPlatform... prvu najduzu sliku u Hierarchy prozor. Vidjet ces pojavljuje u Scene
+         prozoru.. ona prva origilanlna slika grassPlatformsFiltered_0 (Prije toga sam selektovao sliku koja je bila na u sceni!)
+      b) Preimenovat cemo je u grassPlatformLargeBG 
+      c) Sada idemo na Color bijelo okno i D. klik na. Tu cemo je izmjeniti da ne izgleda zeleno kao druge slike (R100, G80, B50)
+         zatim je DragDrop u folder preFabs
+
+
+
+2.3.2- Sad postavljamo Background- Order in Layer npr. na -10. To se naziva "Zed fighting" ali to nema veze sa Z-osom-tackom!
+       U smislu Layer-a Unity funkcionise tako da Layere postavljamo(Order in Layer (-10 NPR ce postaviti iza 0),a ne po tacki Z).
+       Unity ne funkcionise tako da postavljamo 2D nego trazi da postavljamo podatke npr. u Inspector window!
+
+
+2.3.3- Prefab Apply: Da bi nas preFab imao uvjek startne vrijednosti idemo na vrh inspector-a gdje je Prefab i u toj liniji
+       imamo Prefab Select Revert Apply  ( ili Overrides.....)
+       a) Selektuj objekat u Hierarchy => Overrides => Otvara se podprozor koji ima kvaciciu pa klik na nj. i tu se otvara jos
+          jedan novi prozor tzv. Override => Apply
+
+       b) Selektuj objekat u Hierarchy => Overrides => Apply All nakon Apply-a ili All Apply svaki put kad DragDrop sliku
+          iz Prefab-a postavimo na scenu imati cemo unesene vrijednosti iste!
+----------------------------------------------------------------------
+grassPlatformLargeBG  Order in Layer -10  (zatim Apply ili All Apply)
+grassPlatformMedium   Order in Layer  -9  (zatim Apply)
+grassPlatformSmall    Order in Layer  -8  (zatim Apply)
+grassPlatformLarge    Order in Layer  -1  (zatim Apply)
+grassPlatformMedium   Order in Layer   0  (zatim Apply)
+grassPlatformSmall    Order in Layer   1  (zatim Apply)
+------------------------------------------------------------------------
+
+===================================================================================================================================
+
